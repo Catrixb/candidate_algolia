@@ -45,7 +45,7 @@ Build a small application (whatever the language) exposing the following endpoin
     }
 ```
 
-You can use third party libraries if you know how to re-implement the features they're providing.
+You can use third party libraries if you know how to re-implement the features they're providing. Your application cannot depend on any database or external software (the goal is to evaluate your ability to choose the right data structures).
 
 ## Evaluation Criteria
 
