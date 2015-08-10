@@ -12,7 +12,7 @@ Build a small application (whatever the language) exposing the following endpoin
  * `GET /1/queries/count/<DATE_PREFIX>`: returns a JSON object specifying the number of distinct queries that have been done during a specific time range
  * `GET /1/queries/popular/<DATE_PREFIX>?size=<SIZE>`: returns a JSON object listing the top `<SIZE>` popular queries that have been done during a specific time range
 
-## Examples:
+### Examples
 
  * Distinct queries done in 2015: `GET /1/queries/count/2015`: returns `{ count: 573697 }`
  * Distinct queries done in Aug: `GET /1/queries/count/2015-08`: returns `{ count: 573697 }`
@@ -45,7 +45,7 @@ Build a small application (whatever the language) exposing the following endpoin
     }
 ```
 
-You can use third party libraries as soon as you know how to re-implement the features they're providing.
+You can use third party libraries if you know how to re-implement the features they're providing.
 
 ## Evaluation Criteria
 
