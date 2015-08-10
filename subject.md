@@ -15,11 +15,11 @@ Build a small application (whatever the language) exposing the following endpoin
 ## Examples:
 
  * Distinct queries done in 2015: `GET /1/queries/count/2015`: returns `{ count: 573697 }`
- * Distinct queries done in Aug 2015: `GET /1/queries/count/2015-08`: returns `{ count: 573697 }`
- * Distinct queries done on Aug 3rd 2015: `GET /1/queries/count/2015-08-03`: returns `{ count: 198117 }`
- * Distinct queries done on Aug 1st 2015, between 00:04:00 and 00:04:59: `GET /1/queries/count/2015-08-01 00:04`: returns `{ count: 617 }`
+ * Distinct queries done in Aug: `GET /1/queries/count/2015-08`: returns `{ count: 573697 }`
+ * Distinct queries done on Aug 3rd: `GET /1/queries/count/2015-08-03`: returns `{ count: 198117 }`
+ * Distinct queries done on Aug 1st between 00:04:00 and 00:04:59: `GET /1/queries/count/2015-08-01 00:04`: returns `{ count: 617 }`
 
- * Top 3 popularies queries done in 2015: `GET /1/queries/popular/2015?size=3`: returns
+ * Top 3 popular queries done in 2015: `GET /1/queries/popular/2015?size=3`: returns
     ```
     {
       queries: [
@@ -29,7 +29,7 @@ Build a small application (whatever the language) exposing the following endpoin
       ]
     }
     ```
- * Top 5 popularies queries done on Aug 2nd 2015: `GET /1/queries/popular/2015-08-02?size=5`: returns
+ * Top 5 popular queries done on Aug 2nd: `GET /1/queries/popular/2015-08-02?size=5`: returns
     ```
     {
       queries: [
@@ -42,7 +42,7 @@ Build a small application (whatever the language) exposing the following endpoin
     }
     ```
 
-You can use third party libraries as soon as you know how to re-implement what they're providing.
+You can use third party libraries as soon as you know how to re-implement the features they're providing.
 
 ## Evaluation Criteria
 
