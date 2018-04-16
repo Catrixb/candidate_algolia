@@ -2,16 +2,19 @@
 
 namespace tests\e2e;
 
-use App\Commands\PopularCommand;
-use App\Commands\ShellCommand;
 use App\Query;
 use App\QueryCollection;
+use App\QueryFactory;
 use TestCase;
 
 class PopularCommandTest extends TestCase
 {
-  private function getShellCommand($date = 2015, $path = 'tests/fixtures/query_chunk_500.tsv.gz') {
-    return new ShellCommand($date, base_path($path));
+  private function getQueries($dateRange, $size) {
+    return QueryFactory::popular(
+      base_path('tests/fixtures/query_chunk_500.tsv.gz'),
+      $dateRange,
+      $size
+    );
   }
 
   /**
@@ -20,11 +23,6 @@ class PopularCommandTest extends TestCase
    * @return void
    */
   public function it_lists_the_number_of_popular_queries_for_year_2015() {
-    $command = new PopularCommand(
-      $this->getShellCommand('2015'),
-      4
-    );
-
     $expected = new QueryCollection(
       [
         new Query(3, 'https%3A%2F%2Fwww.comparis.ch%2Fsparzinsen%2Fdefault.aspx'),
@@ -34,10 +32,10 @@ class PopularCommandTest extends TestCase
       ]
     );
 
-    $result = new QueryCollection($command->execute());
+    $queries = $this->getQueries('2015', 4);
 
     $this->assertEquals(
-      $expected->toArray(), $result->toArray()
+      $expected->toArray(), $queries->toArray()
     );
   }
 
@@ -47,15 +45,10 @@ class PopularCommandTest extends TestCase
    * @return void
    */
   public function it_finds_no_queries_for_year_2016() {
-    $command = new PopularCommand(
-      $this->getShellCommand('2016'),
-      4
-    );
-
-    $result = new QueryCollection($command->execute());
+    $queries = $this->getQueries('2016', 4);
 
     $this->assertEquals(
-      ['queries' => []], $result->toArray()
+      ['queries' => []], $queries->toArray()
     );
   }
 }

@@ -23,4 +23,18 @@ class Query implements \JsonSerializable
 
     return $query;
   }
+
+  /**
+   * @return int
+   */
+  public function getCount(): int {
+    return $this->count;
+  }
+
+  /**
+   * @return string
+   */
+  public function getQuery(): string {
+    return $this->query;
+  }
 }

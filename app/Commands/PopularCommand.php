@@ -2,8 +2,6 @@
 
 namespace App\Commands;
 
-use App\Query;
-
 /**
  * It finds the top $this->size queries that have been done during
  * a specif time range
