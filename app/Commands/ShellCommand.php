@@ -1,16 +1,14 @@
 <?php
-namespace App;
 
+namespace App\Commands;
 
 class ShellCommand
 {
-  const COUNT_UNIQUE = 'c';
-
   private $command = [];
 
   public function __construct($find, $path) {
     $file = new \SplFileInfo($path);
-    
+
     $grep = $file->getExtension() === 'gz' ? 'zgrep' : "grep";
 
     // Use LC_ALL=C to change the locale for better grep performances
@@ -73,8 +71,7 @@ class ShellCommand
     return $this;
   }
 
-  public function __toString()
-  {
+  public function __toString() {
     return join(' | ', $this->command);
   }
 }

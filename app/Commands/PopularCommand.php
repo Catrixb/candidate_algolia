@@ -1,10 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Commands;
+
+use App\Query;
 
 /**
  * It finds the top $this->size queries that have been done during
- * a specific time range
+ * a specif time range
  */
 class PopularCommand extends QueryCommand
 {

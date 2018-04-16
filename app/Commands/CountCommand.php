@@ -1,5 +1,6 @@
 <?php
-namespace App;
+
+namespace App\Commands;
 
 /**
  * It finds the number of distinct queries that have been done during
@@ -7,8 +8,7 @@ namespace App;
  */
 class CountCommand extends QueryCommand
 {
-  public function execute(): int
-  {
+  public function execute(): int {
     $this->command
       ->selectColumn(2)
       ->sort()

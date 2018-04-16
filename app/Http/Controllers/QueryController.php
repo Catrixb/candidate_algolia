@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\CountCommand;
-use App\PopularCommand;
+use App\Commands\CountCommand;
+use App\Commands\PopularCommand;
+use App\Commands\ShellCommand;
 use App\Query;
 use App\QueryCollection;
-use App\ShellCommand;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller;

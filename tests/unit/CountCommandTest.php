@@ -2,8 +2,8 @@
 
 namespace tests\e2e;
 
-use App\CountCommand;
-use App\ShellCommand;
+use App\Commands\CountCommand;
+use App\Commands\ShellCommand;
 use TestCase;
 
 class CountCommandTest extends TestCase

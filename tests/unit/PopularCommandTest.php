@@ -2,11 +2,10 @@
 
 namespace tests\e2e;
 
-use App\CountCommand;
-use App\PopularCommand;
+use App\Commands\PopularCommand;
+use App\Commands\ShellCommand;
 use App\Query;
 use App\QueryCollection;
-use App\ShellCommand;
 use TestCase;
 
 class PopularCommandTest extends TestCase
