@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Commands\CountCommand;
-use App\Commands\PopularCommand;
-use App\Commands\ShellCommand;
-use App\Query;
-use App\QueryCollection;
+use App\QueryFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller;
@@ -35,12 +31,8 @@ class QueryController extends Controller
    * @return Response
    */
   public function count($dateRange) {
-    $command = (new CountCommand(
-      new ShellCommand($dateRange, $this->filePath)
-    ));
-
     return response()->json(
-      new Query($command->execute())
+      QueryFactory::count($this->filePath, $dateRange)
     );
   }
 
@@ -60,15 +52,8 @@ class QueryController extends Controller
 
     $size = $request->get('size');
 
-    $command = (new PopularCommand(
-      new ShellCommand($dateRange, $this->filePath),
-      $size
-    ));
-
-    $collection = new QueryCollection($command->execute());
-
     return response()->json(
-      $collection->toArray()
+      QueryFactory::popular($this->filePath, $dateRange, $size)
     );
   }
 }

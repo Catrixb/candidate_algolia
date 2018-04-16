@@ -17,7 +17,7 @@ class PopularCommand extends QueryCommand
     parent::__construct($command);
   }
 
-  public function execute(): array {
+  public function execute(): string {
     $this->command
       ->selectColumn(2)
       ->sort()
@@ -27,21 +27,9 @@ class PopularCommand extends QueryCommand
       ->trim();
 
     if (empty($query = parent::execute())) {
-      return [];
+      return "";
     }
 
-    return $this->parse($query);
-  }
-
-  private function parse(string $rawQuery): array {
-    $queries = explode("\n", $rawQuery, $this->size);
-
-    $queries = collect($queries)->map(function($q) {
-      list($count, $query) = explode(" ", $q);
-
-      return new Query($count, $query);
-    });
-
-    return $queries->toArray();
+    return $query;
   }
 }
