@@ -7,15 +7,20 @@ class Query implements \JsonSerializable
   private $query;
   private $count;
 
-  public function __construct(int $count, string $query) {
+  public function __construct(int $count, string $query = '') {
     $this->count = $count;
     $this->query = trim($query);
   }
 
   public function jsonSerialize() {
-    return [
-      'query' => $this->query,
-      'count' => $this->count
-    ];
+    $query = [];
+
+    if ($this->query) {
+      $query['query'] = $this->query;
+    }
+
+    $query['count'] = $this->count;
+
+    return $query;
   }
 }

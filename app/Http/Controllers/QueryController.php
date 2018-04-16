@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CountCommand;
 use App\PopularCommand;
+use App\Query;
 use App\QueryCollection;
 use App\ShellCommand;
 use Illuminate\Http\Request;
@@ -38,7 +39,9 @@ class QueryController extends Controller
       new ShellCommand($dateRange, $this->filePath)
     ));
 
-    return response()->json(['count' => $command->execute()]);
+    return response()->json(
+      new Query($command->execute())
+    );
   }
 
   /**
@@ -64,6 +67,8 @@ class QueryController extends Controller
 
     $collection = new QueryCollection($command->execute());
 
-    return response()->json($collection->toArray());
+    return response()->json(
+      $collection->toArray()
+    );
   }
 }
