@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\CountCommand;
+use App\ShellCommand;
 use Laravel\Lumen\Routing\Controller;
 
 class QueryController extends Controller
@@ -15,6 +17,16 @@ class QueryController extends Controller
    * @return Response
    */
   public function count($dateRange) {
-    return response()->json(['count' => 573697]);
+    $filePath = storage_path('app/hn_logs.tsv.gz');
+
+    if (!file_exists($filePath)) {
+      abort(404);
+    }
+
+    $command = (new CountCommand(
+      new ShellCommand($dateRange, $filePath)
+    ));
+
+    return response()->json(['count' => $command->execute()]);
   }
 }
