@@ -11,6 +11,12 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => '1/queries/'], function() use ($router) {
+  $dateRangeValidation = '[0-9]{4}(?:-\d{2})?(?:-\d{2})?(?: \d{2}:\d{2})?';
+
+  $router
+    ->get('count/{dateRange:'. $dateRangeValidation .'}', [
+      'as' => 'count',
+      'uses' => 'QueryController@count'
+    ]);
 });
