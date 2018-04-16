@@ -9,7 +9,7 @@ class CountCommandTest extends TestCase
 {
   private function getQuery($dateRange) {
     return QueryFactory::count(
-      base_path('tests/fixtures/query_chunk_100.tsv.gz'),
+      new \SplFileInfo(base_path('tests/fixtures/query_chunk_100.tsv.gz')),
       $dateRange
     );
   }

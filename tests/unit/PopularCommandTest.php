@@ -11,7 +11,7 @@ class PopularCommandTest extends TestCase
 {
   private function getQueries($dateRange, $size) {
     return QueryFactory::popular(
-      base_path('tests/fixtures/query_chunk_500.tsv.gz'),
+      new \SplFileInfo(base_path('tests/fixtures/query_chunk_500.tsv.gz')),
       $dateRange,
       $size
     );

@@ -6,13 +6,11 @@ class ShellCommand
 {
   private $command = [];
 
-  public function __construct($find, $path) {
-    $file = new \SplFileInfo($path);
-
+  public function __construct($find, \SplFileInfo $file) {
     $grep = $file->getExtension() === 'gz' ? 'zgrep' : "grep";
 
     // Use LC_ALL=C to change the locale for better grep performances
-    $this->command[] = "LC_ALL=C $grep '^$find' $path";
+    $this->command[] = "LC_ALL=C $grep '^$find' {$file->getRealPath()}";
 
     return $this;
   }
