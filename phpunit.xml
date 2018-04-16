@@ -10,7 +10,7 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="integration">
+        <testsuite name="e2e">
             <directory suffix="Test.php">./tests/e2e</directory>
         </testsuite>
         <testsuite name="unit">

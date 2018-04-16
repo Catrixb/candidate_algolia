@@ -3,7 +3,7 @@ namespace App;
 
 /**
  * It finds the number of distinct queries that have been done during
- * $this->dateRange time range
+ * a specific time range
  */
 class CountCommand extends QueryCommand
 {

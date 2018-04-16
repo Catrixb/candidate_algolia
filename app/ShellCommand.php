@@ -13,7 +13,8 @@ class ShellCommand
     
     $grep = $file->getExtension() === 'gz' ? 'zgrep' : "grep";
 
-    $this->command[] = "$grep '^$find' $path";
+    // Use LC_ALL=C to change the locale for better grep performances
+    $this->command[] = "LC_ALL=C $grep '^$find' $path";
 
     return $this;
   }
@@ -74,6 +75,6 @@ class ShellCommand
 
   public function __toString()
   {
-    return 'LC_ALL=C ' . join(' | ', $this->command);
+    return join(' | ', $this->command);
   }
 }

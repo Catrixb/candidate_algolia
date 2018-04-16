@@ -9,8 +9,10 @@ class QueryControllerTest extends TestCase
     return $this->get('1/queries/count/' . $dateRange);
   }
 
-  private function queryPopular($dateRange, $size = 5) {
-    return $this->get('1/queries/popular/' . $dateRange . '?size=' . $size);
+  private function queryPopular($dateRange, $size = '') {
+    $parameter = empty($size) ? '' : '?size=' . $size;
+
+    return $this->get('1/queries/popular/' . $dateRange . $parameter);
   }
 
   /**
@@ -72,22 +74,16 @@ class QueryControllerTest extends TestCase
 
   /**
    * @test
-   *
-   * @return void
    */
-//  public function it_gets_the_top_5_popular_queries_in_2015() {
-//    $this->queryPopular('2015', 3);
-//
-//    $expected = new QueryCollection(
-//      [
-//        new Query(6675, 'http%3A%2F%2Fwww.getsidekick.com%2Fblog%2Fbody-language-advice'),
-//        new Query(4652, 'http%3A%2F%2Fwebboard.yenta4.com%2Ftopic%2F568045'),
-//        new Query(3100, 'http%3A%2F%2Fwebboard.yenta4.com%2Ftopic%2F379035%3Fsort%3D1')
-//      ]
-//    );
-//
-//    $this->assertEquals(
-//      $expected->toArray(), $this->response->getDecodedJson()
-//    );
-//  }
+  public function it_fails_on_popular_request_with_wrong_size_parameter() {
+    $this->queryPopular('2015-08-02', "undefined");
+    $this->assertEquals(
+      '{"size":["The size must be an integer."]}', $this->response->getContent()
+    );
+
+    $this->queryPopular('2015-08-02');
+    $this->assertEquals(
+      '{"size":["The size field is required."]}', $this->response->getContent()
+    );
+  }
 }

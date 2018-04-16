@@ -4,7 +4,7 @@ namespace App;
 
 /**
  * It finds the top $this->size queries that have been done during
- * $this->dateRange time range
+ * a specific time range
  */
 class PopularCommand extends QueryCommand
 {
