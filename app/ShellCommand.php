@@ -4,6 +4,8 @@ namespace App;
 
 class ShellCommand
 {
+  const COUNT_UNIQUE = 'c';
+
   private $command = [];
 
   public function __construct($find, $path) {
@@ -28,8 +30,20 @@ class ShellCommand
     return $this;
   }
 
+  public function reverseSort() {
+    $this->command[] = 'sort -r';
+
+    return $this;
+  }
+
   public function uniq() {
-    $this->command[] = 'uniq';
+    $this->command[] .= 'uniq';
+
+    return $this;
+  }
+
+  public function countUniq() {
+    $this->command[] .= 'uniq -c';
 
     return $this;
   }
@@ -41,13 +55,19 @@ class ShellCommand
   }
 
   public function trim() {
-    $this->command[] = "sed -e 's/^ *//;s/ / | /'";
+    $this->command[] = "sed -e 's/^ *//;s/ / /'";
 
     return $this;
   }
 
   public function removeNewLines() {
     $this->command[] = "tr -d '\n'";
+
+    return $this;
+  }
+
+  public function limit(int $limit) {
+    $this->command[] = "head -$limit";
 
     return $this;
   }

@@ -8,7 +8,7 @@ use TestCase;
 
 class CountCommandTest extends TestCase
 {
-  private function getShellCommand($date = 2015, $path = 'tests/fixtures/test_chunck.log.gz')
+  private function getShellCommand($date = 2015, $path = 'tests/fixtures/query_chunk_100.tsv.gz')
   {
     return new ShellCommand($date, base_path($path));
   }
@@ -34,7 +34,7 @@ class CountCommandTest extends TestCase
    *
    * @return void
    */
-  public function it_counts_the_number_of_distinct_queries_between_04_and_04_59_minute()
+  public function it_counts_the_number_of_distinct_queries_for_2015_between_04_and_04_59_minute()
   {
     $command = new CountCommand(
       $this->getShellCommand('2015-08-01 00:04')
