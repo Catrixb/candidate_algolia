@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ApcCacheFactory;
 use App\Cache\CacheFactory;
 use App\Cache\QueryFactoryCache;
+use App\DateRangeHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller;
@@ -15,12 +16,12 @@ class QueryController extends Controller
    *  Returns a JSON object specifying the number of distinct queries that
    *  have been done during a specific time range
    *
-   * @param string $dateRange
+   * @param DateRangeHelper $dateRange
    *
    * @return Response
    */
   public function count($dateRange) {
-    $dateRange = urldecode($dateRange);
+    $dateRange = new DateRangeHelper($dateRange);
 
     $cache = new QueryFactoryCache(CacheFactory::getCache());
 
@@ -34,7 +35,7 @@ class QueryController extends Controller
    *  queries that have been done during a specific time range
    *
    * @param Request $request
-   * @param string  $dateRange
+   * @param DateRangeHelper  $dateRange
    *
    * @return Response
    */
@@ -44,7 +45,7 @@ class QueryController extends Controller
     ]);
 
     $size = $request->get('size');
-    $dateRange = urldecode($dateRange);
+    $dateRange = new DateRangeHelper($dateRange);
 
     $cache = new QueryFactoryCache(CacheFactory::getCache());
 

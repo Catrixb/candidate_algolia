@@ -2,6 +2,7 @@
 
 namespace App\Cache;
 
+use App\DateRangeHelper;
 use App\Query;
 use App\QueryCollection;
 use App\QueryFactory;
@@ -14,7 +15,7 @@ class QueryFactoryCache
     $this->cache = $cache;
   }
 
-  public function count(string $dateRange): Query {
+  public function count(DateRangeHelper $dateRange): Query {
     $file = $this->refreshCache($dateRange);
 
     $cacheKey = $dateRange . '-' . __METHOD__;
@@ -29,7 +30,7 @@ class QueryFactoryCache
     return $query;
   }
 
-  public function popular(string $dateRange, int $size): QueryCollection {
+  public function popular(DateRangeHelper $dateRange, int $size): QueryCollection {
     $file = $this->refreshCache($dateRange);
 
     $cacheKey = $dateRange . '-' . __METHOD__ . '-' . $size;
@@ -45,21 +46,18 @@ class QueryFactoryCache
   }
 
   // TODO event
-  private function refreshCache($dateRange): \SplFileInfo {
-    $dates = explode('-', $dateRange);
-    $year = $dates[0];
+  private function refreshCache(DateRangeHelper $dateRange): \SplFileInfo {
+    $lastModifiedInCache = $this->cache->get($dateRange->year());
 
-    $lastModifiedInCache = $this->cache->get($year);
-
-    $file = QueryFileFactory::getFileInfo($year);
+    $file = QueryFileFactory::getFileInfo($dateRange);
 
     $lastModified = $file->getMTime();
     if (empty($lastModifiedInCache)) {
-      $this->cache->set($year, $lastModified);
+      $this->cache->set($dateRange->year(), $lastModified);
     } else if ($lastModified !== $lastModifiedInCache) {
-      $this->cache->delete($year);
-      QueryFileFactory::removeFileReduced($year);
-      $this->cache->set($year, $lastModified);
+      $this->cache->delete($dateRange->year());
+      QueryFileFactory::removeFileReduced($dateRange);
+      $this->cache->set($dateRange->year(), $lastModified);
     }
 
     // Generate the file for this dateRAnge

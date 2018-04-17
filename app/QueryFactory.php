@@ -8,7 +8,7 @@ use App\Commands\ShellCommand;
 
 class QueryFactory
 {
-  static public function count(\SplFileInfo $file, string $dateRange): Query {
+  static public function count(\SplFileInfo $file, DateRangeHelper $dateRange): Query {
     $command = (new CountCommand(
       new ShellCommand($dateRange, $file)
     ));
@@ -16,7 +16,7 @@ class QueryFactory
     return new Query($command->execute());
   }
 
-  static public function popular(\SplFileInfo $file, string $dateRange, int $size): QueryCollection {
+  static public function popular(\SplFileInfo $file, DateRangeHelper $dateRange, int $size): QueryCollection {
     $command = (new PopularCommand(
       new ShellCommand($dateRange, $file),
       $size

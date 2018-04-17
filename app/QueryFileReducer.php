@@ -26,22 +26,18 @@ class QueryFileReducer
     $this->fileSystem = new Filesystem($adapter);
   }
 
-  public function reduce(string $dateRange) {
-    $date = preg_replace('~\s.*~', '', $dateRange);
-    $dates = explode('-', $date);
-    $depth = count($dates);
-
-    $yearPath = $this->fileName . "-$dates[0]" . $this->fileExtension;
+  public function reduce(DateRangeHelper $date) {
+    $yearPath = $this->fileName . "-{$date->year()}" . $this->fileExtension;
     $file = new \SplFileInfo($this->rootPath . $yearPath);
 
-    if ($depth === self::REDUCE_BY_YEAR) {
+    if (count($date) === self::REDUCE_BY_YEAR) {
       return $file;
     }
 
-    if ($depth === self::REDUCE_BY_MONTH) {
-      $path = $this->fileName . "-$dates[0]-$dates[1]";
-    } elseif ($depth === self::REDUCE_BY_DAY) {
-      $path = $this->fileName . "-$dates[0]-$dates[1]-$dates[2]";
+    if (count($date) === self::REDUCE_BY_MONTH) {
+      $path = $this->fileName . "-{$date->year()}-{$date->month()}";
+    } elseif (count($date) === self::REDUCE_BY_DAY) {
+      $path = $this->fileName . "-{$date->year()}-{$date->month()}-{$date->day()}";
     }
 
     $file = $this->reduceFile($path, $date, $file);

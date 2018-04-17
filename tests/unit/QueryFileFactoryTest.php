@@ -2,6 +2,7 @@
 
 namespace tests\e2e;
 
+use App\DateRangeHelper;
 use App\QueryFileFactory;
 use TestCase;
 
@@ -25,7 +26,7 @@ class QueryFileFactoryTest extends TestCase
 
     $this->assertEquals(
       $path . 'hn_logs-2015.tsv.gz',
-      QueryFileFactory::getFileInfo('2015')->getRealPath()
+      QueryFileFactory::getFileInfo(new DateRangeHelper('2015'))->getRealPath()
     );
   }
 
@@ -37,7 +38,7 @@ class QueryFileFactoryTest extends TestCase
 
     $this->assertEquals(
       $path . 'hn_logs-2015-08.tsv.gz',
-      QueryFileFactory::getFileInfo('2015-08')->getRealPath()
+      QueryFileFactory::getFileInfo(new DateRangeHelper('2015-08'))->getRealPath()
     );
   }
 }
