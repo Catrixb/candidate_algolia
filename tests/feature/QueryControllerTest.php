@@ -27,8 +27,6 @@ class QueryControllerTest extends TestCase
 
   /**
    * @test
-   *
-   * @return void
    */
   public function it_gets_a_count_entry_from_a_valid_date_format() {
     $this->queryCount('2015');
@@ -40,8 +38,6 @@ class QueryControllerTest extends TestCase
 
   /**
    * @test
-   *
-   * @return void
    */
   public function it_gets_the_top_3_popular_queries_in_2015() {
     $this->queryPopular('2015', 3);
@@ -61,8 +57,6 @@ class QueryControllerTest extends TestCase
 
   /**
    * @test
-   *
-   * @return void
    */
   public function it_gets_the_top_5_popular_queries_for_the_date_2015_08_02() {
     $this->queryPopular('2015-08-02', 5);

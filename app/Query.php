@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Query implements \JsonSerializable
+class Query implements \JsonSerializable, \Countable
 {
   private $query;
   private $count;
@@ -27,14 +27,7 @@ class Query implements \JsonSerializable
   /**
    * @return int
    */
-  public function getCount(): int {
+  public function count(): int {
     return $this->count;
-  }
-
-  /**
-   * @return string
-   */
-  public function getQuery(): string {
-    return $this->query;
   }
 }

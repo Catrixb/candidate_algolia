@@ -29,9 +29,9 @@ Either create a specific vhost or run a php server locally.
 $ # all tests
 $ ./vendor/bin/phpunit
 
-$ # e2e tests
+$ # Integration tests
 $ # Integration test are based on the examples defined in the subject.md
-$ ./vendor/bin/phpunit --testsuite e2e
+$ ./vendor/bin/phpunit --testsuite feature
 
 $ # unit tests
 $ ./vendor/bin/phpunit --testsuite unit

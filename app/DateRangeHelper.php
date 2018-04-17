@@ -25,15 +25,7 @@ class DateRangeHelper implements \Countable
     return $this->dates[3] ?? null;
   }
 
-  public function hour() {
-    return $this->dates[4] ?? null;
-  }
-
-  public function minute() {
-    return $this->dates[5] ?? null;
-  }
-
-  function __toString() {
+  public function __toString() {
     return $this->dateRange;
   }
 
