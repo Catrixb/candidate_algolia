@@ -100,6 +100,10 @@ $app->router->group([
 });
 
 // Custom configuration file to /config/app.php
-$app->configure('app');
+if ($app->environment() === 'testing') {
+  $app->configure('test');
+} else {
+  $app->configure('app');
+}
 
 return $app;

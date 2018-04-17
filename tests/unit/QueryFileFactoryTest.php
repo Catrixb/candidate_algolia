@@ -25,7 +25,7 @@ class QueryFileFactoryTest extends TestCase
 
     $this->assertEquals(
       $path . 'hn_logs-2015.tsv.gz',
-      QueryFileFactory::getFileInfo('2015', $path)->getRealPath()
+      QueryFileFactory::getFileInfo('2015')->getRealPath()
     );
   }
 
@@ -37,7 +37,7 @@ class QueryFileFactoryTest extends TestCase
 
     $this->assertEquals(
       $path . 'hn_logs-2015-08.tsv.gz',
-      QueryFileFactory::getFileInfo('2015-08', $path)->getRealPath()
+      QueryFileFactory::getFileInfo('2015-08')->getRealPath()
     );
   }
 }

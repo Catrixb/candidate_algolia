@@ -5,6 +5,16 @@ use App\QueryCollection;
 
 class QueryControllerTest extends TestCase
 {
+  public function tearDown() {
+    parent::tearDown();
+
+    $fileToClean = base_path('tests/fixtures/hn_logs-2015-08-02.tsv.gz');
+
+    if (file_exists($fileToClean)) {
+      unlink($fileToClean);
+    }
+  }
+
   private function queryCount($dateRange) {
     return $this->get('1/queries/count/' . $dateRange);
   }

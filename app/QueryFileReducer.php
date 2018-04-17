@@ -19,8 +19,8 @@ class QueryFileReducer
 
   public function __construct($rootPath) {
     $this->rootPath = $rootPath;
-    $this->fileName = config('app.file.query.name');
-    $this->fileExtension = config('app.file.query.extension');
+    $this->fileName = Config::get('file.query.name');
+    $this->fileExtension = Config::get('file.query.extension');
 
     $adapter = new Local($rootPath);
     $this->fileSystem = new Filesystem($adapter);

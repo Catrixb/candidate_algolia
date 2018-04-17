@@ -2,7 +2,7 @@
 return [
   'file' => [
     'query' => [
-      'path' => 'app/queries/',
+      'storagePath' => storage_path('app/queries/'),
       'name' => 'hn_logs',
       'extension' => '.tsv.gz'
     ]

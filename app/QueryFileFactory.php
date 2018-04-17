@@ -12,17 +12,15 @@ class QueryFileFactory
     $dates = explode('-', $date);
 
     array_map('unlink', glob(
-      storage_path(config("app.file.query.path")) .
-      config("app.file.query.name") .
+      Config::get("file.query.storagePath") .
+      Config::get("file.query.name") .
       "-$dates[0]-*" .
-      config("app.file.query.extension")
+      Config::get("file.query.extension")
     ));
   }
 
-  static public function getFileInfo(string $date, $path = '') {
-    $reducer = new QueryFileReducer(
-      empty($path) ? storage_path(config("app.file.query.path")) : $path
-    );
+  static public function getFileInfo(string $date) {
+    $reducer = new QueryFileReducer(Config::get("file.query.storagePath"));
 
     return $reducer->reduce($date);
   }
