@@ -2,69 +2,39 @@
 
 namespace App;
 
-use App\Commands\ShellCommand;
-use App\Commands\ShellCommandToFile;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-
-class QueryFileReducer
+class QueryFileReducer implements FileReducer
 {
-  const REDUCE_BY_YEAR = 1;
-  const REDUCE_BY_MONTH = 2;
-  const REDUCE_BY_DAY = 3;
+  private $config;
 
-  private $rootPath;
-  private $fileName;
-  private $fileExtension;
-
-  public function __construct($rootPath) {
-    $this->rootPath = $rootPath;
-    $this->fileName = Config::get('file.query.name');
-    $this->fileExtension = Config::get('file.query.extension');
-
-    $adapter = new Local($rootPath);
-    $this->fileSystem = new Filesystem($adapter);
+  public function __construct(Config $config) {
+    $this->config = $config;
   }
 
-  public function reduce(DateRangeHelper $date) {
-    $yearPath = $this->fileName . "-{$date->year()}" . $this->fileExtension;
-    $file = new \SplFileInfo($this->rootPath . $yearPath);
+  public function reduce(string $date) {
+    $dateRangeHelper = new DateRangeHelper($date);
 
-    if (count($date) === self::REDUCE_BY_YEAR) {
-      return $file;
+    $from = new \SplFileInfo(
+      $this->config->getFullPath($dateRangeHelper->year())
+    );
+
+    $to = new \SplFileInfo(
+      $this->config->getFullPath($dateRangeHelper->cut())
+    );
+
+    if (!$to->isFile()) {
+      QueryFactory::reduce($from, $to, $date);
+
+      return $to;
     }
 
-    if (count($date) === self::REDUCE_BY_MONTH) {
-      $path = $this->fileName . "-{$date->year()}-{$date->month()}";
-    } elseif (count($date) === self::REDUCE_BY_DAY) {
-      $path = $this->fileName . "-{$date->year()}-{$date->month()}-{$date->day()}";
-    }
-
-    $file = $this->reduceFile($path, $date, $file);
-    
-    if (!$file->isExecutable()) {
-      chmod($file->getRealPath(), octdec(755));
-    }
-
-    return $file;
+    return $from;
   }
 
-  private function reduceFile($path, $date, $file) {
-    $fullPath = $this->rootPath . $path . $this->fileExtension;
+  public function clean(string $date) {
+    $dateRangeHelper = new DateRangeHelper($date);
 
-    if (!$this->fileSystem->has($path . $this->fileExtension)) {
-      $this->fileSystem->write($path . $this->fileExtension, '');
-
-      $commandToFile = new ShellCommandToFile(
-        new ShellCommand($date, $file),
-        $fullPath
-      );
-
-      $commandToFile->execute();
-      
-      return new \SplFileInfo($fullPath);
-    }
-
-    return $file;
+    array_map('unlink', glob(
+      $this->config->getFullPath($dateRangeHelper->year().'-*')
+    ));
   }
 }

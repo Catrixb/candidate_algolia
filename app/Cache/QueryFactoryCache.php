@@ -2,65 +2,87 @@
 
 namespace App\Cache;
 
+use App\Config;
 use App\DateRangeHelper;
+use App\Exceptions\RootQueryFileNotFoundException;
+use App\FileReducer;
 use App\Query;
 use App\QueryCollection;
 use App\QueryFactory;
+use App\QueryFile;
 use App\QueryFileFactory;
 use Psr\SimpleCache\CacheInterface;
 
 class QueryFactoryCache
 {
-  public function __construct(CacheInterface $cache) {
+  public function __construct(CacheInterface $cache, Config $config, FileReducer $reducer) {
     $this->cache = $cache;
+    $this->config = $config;
+    $this->reducer = $reducer;
   }
 
-  public function count(DateRangeHelper $dateRange): Query {
-    $file = $this->refreshCache($dateRange);
+  public function count(string $date): Query {
+    try {
+      $this->refreshCacheIfModified($date);
 
-    $cacheKey = $dateRange . '-' . __METHOD__;
-    if ($cache = $this->cache->get($cacheKey)) {
-      return $cache;
+      $cacheKey = $date . '-' . __METHOD__;
+      if ($cache = $this->cache->get($cacheKey)) {
+        return $cache;
+      }
+
+      $query = QueryFactory::count($this->reducer->reduce($date), $date);
+
+      $this->cache->set($cacheKey, $query);
+    } catch (RootQueryFileNotFoundException $e) {
+      $query = new Query(0);
     }
-
-    $query = QueryFactory::count($file, $dateRange);
-
-    $this->cache->set($cacheKey, $query);
 
     return $query;
   }
 
-  public function popular(DateRangeHelper $dateRange, int $size): QueryCollection {
-    $file = $this->refreshCache($dateRange);
+  public function popular(string $date, int $size): QueryCollection {
+    try {
+      $this->refreshCacheIfModified($date);
 
-    $cacheKey = $dateRange . '-' . __METHOD__ . '-' . $size;
-    if ($cache = $this->cache->get($cacheKey)) {
-      return $cache;
+      $cacheKey = $date . '-' . __METHOD__ . '-' . $size;
+      if ($cache = $this->cache->get($cacheKey)) {
+        return $cache;
+      }
+
+      $collection = QueryFactory::popular(
+        $this->reducer->reduce($date),
+        $date,
+        $size
+      );
+
+      $this->cache->set($cacheKey, $collection);
+    } catch (RootQueryFileNotFoundException $e) {
+      $collection = new QueryCollection();
     }
-
-    $collection = QueryFactory::popular($file, $dateRange, $size);
-
-    $this->cache->set($cacheKey, $collection);
 
     return $collection;
   }
 
-  // TODO event
-  private function refreshCache(DateRangeHelper $dateRange): \SplFileInfo {
-    $lastModifiedInCache = $this->cache->get($dateRange->year());
+  private function refreshCacheIfModified(string $date) {
+    $date = new DateRangeHelper($date);
+    $year = $date->year();
 
-    $file = QueryFileFactory::getFileInfo($dateRange);
+    $lastModifiedInCache = $this->cache->get($year);
 
-    $lastModified = $file->getMTime();
-    if (empty($lastModifiedInCache)) {
-      $this->cache->set($dateRange->year(), $lastModified);
-    } else if ($lastModified !== $lastModifiedInCache) {
-      $this->cache->delete($dateRange->year());
-      QueryFileFactory::removeFileReduced($dateRange);
-      $this->cache->set($dateRange->year(), $lastModified);
+    $file = new \SplFileInfo($this->config->getFullPath($year));
+
+    if (!$file->isFile()) {
+      throw new RootQueryFileNotFoundException("No file found for the date $date");
     }
 
-    // Generate the file for this dateRAnge
-    return QueryFileFactory::getFileInfo($dateRange);
+    $lastModified = $file->getMTime();
+
+    if (empty($lastModifiedInCache)) {
+      $this->cache->set($year, $lastModified);
+    } else if ($lastModified !== $lastModifiedInCache) {
+      $this->cache->delete($year);
+      $this->reducer->clean($date);
+      $this->cache->set($year, $lastModified);
+    }
   }
 }

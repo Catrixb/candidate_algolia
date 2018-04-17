@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\ApcCacheFactory;
 use App\Cache\CacheFactory;
 use App\Cache\QueryFactoryCache;
-use App\DateRangeHelper;
+use App\Config;
+use App\QueryFileReducer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller;
@@ -16,17 +17,19 @@ class QueryController extends Controller
    *  Returns a JSON object specifying the number of distinct queries that
    *  have been done during a specific time range
    *
-   * @param DateRangeHelper $dateRange
+   * @param DateRangeHelper $date
    *
    * @return Response
    */
-  public function count($dateRange) {
-    $dateRange = new DateRangeHelper($dateRange);
-
-    $cache = new QueryFactoryCache(CacheFactory::getCache());
+  public function count($date) {
+    $cache = new QueryFactoryCache(
+      CacheFactory::getCache(),
+      Config::self(),
+      new QueryFileReducer(Config::self())
+    );
 
     return response()->json(
-      $cache->count($dateRange)
+      $cache->count($date)
     );
   }
 
@@ -35,22 +38,25 @@ class QueryController extends Controller
    *  queries that have been done during a specific time range
    *
    * @param Request $request
-   * @param DateRangeHelper  $dateRange
+   * @param DateRangeHelper  $date
    *
    * @return Response
    */
-  public function popular(Request $request, $dateRange) {
+  public function popular(Request $request, $date) {
     $this->validate($request, [
       'size' => 'required|integer'
     ]);
 
     $size = $request->get('size');
-    $dateRange = new DateRangeHelper($dateRange);
 
-    $cache = new QueryFactoryCache(CacheFactory::getCache());
+    $cache = new QueryFactoryCache(
+      CacheFactory::getCache(),
+      Config::self(),
+      new QueryFileReducer(Config::self())
+    );
 
     return response()->json(
-      $cache->popular($dateRange, $size)
+      $cache->popular($date, $size)
     );
   }
 }

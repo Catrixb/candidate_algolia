@@ -1,8 +1,7 @@
 <?php
 
-namespace tests\e2e;
+namespace tests\unit;
 
-use App\DateRangeHelper;
 use App\Query;
 use App\QueryCollection;
 use App\QueryFactory;
@@ -10,10 +9,10 @@ use TestCase;
 
 class PopularCommandTest extends TestCase
 {
-  private function getQueries($dateRange, $size) {
+  private function getQueries($date, $size) {
     return QueryFactory::popular(
       new \SplFileInfo(base_path('tests/fixtures/query_chunk_500.tsv.gz')),
-      $dateRange,
+      $date,
       $size
     );
   }
@@ -33,7 +32,7 @@ class PopularCommandTest extends TestCase
       ]
     );
 
-    $queries = $this->getQueries(new DateRangeHelper('2015'), 4);
+    $queries = $this->getQueries('2015', 4);
 
     $this->assertEquals(
       $expected->toArray(), $queries->toArray()
@@ -46,7 +45,7 @@ class PopularCommandTest extends TestCase
    * @return void
    */
   public function it_finds_no_queries_for_year_2016() {
-    $queries = $this->getQueries(new DateRangeHelper('2016'), 4);
+    $queries = $this->getQueries('2016', 4);
 
     $this->assertEquals(
       ['queries' => []], $queries->toArray()

@@ -2,19 +2,18 @@
 
 namespace App\Cache;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use App\Config;
+use League\Flysystem\FilesystemInterface;
 use Psr\SimpleCache\CacheInterface;
 
 class FileCache implements CacheInterface
 {
   private $fileSystem;
-  private $path;
+  private $config;
 
-  public function __construct() {
-    $this->path = storage_path('app/queries/cache/');
-    $adapter = new Local($this->path);
-    $this->fileSystem = new Filesystem($adapter);
+  public function __construct(FilesystemInterface $filesystem, Config $config) {
+    $this->config = $config;
+    $this->fileSystem = $filesystem;
   }
 
   private function sanitizeKey($key) {
@@ -34,7 +33,7 @@ class FileCache implements CacheInterface
   }
 
   public function delete($key) {
-    return array_map('unlink', glob($this->path . $key . '-*'));
+    return array_map('unlink', glob($this->config->get('file.query.cache') . $key . '-*'));
   }
 
   /**

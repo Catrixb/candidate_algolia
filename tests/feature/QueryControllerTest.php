@@ -1,7 +1,10 @@
 <?php
 
+namespace tests\feature;
+
 use App\Query;
 use App\QueryCollection;
+use TestCase;
 
 class QueryControllerTest extends TestCase
 {
@@ -15,14 +18,14 @@ class QueryControllerTest extends TestCase
     }
   }
 
-  private function queryCount($dateRange) {
-    return $this->get('1/queries/count/' . $dateRange);
+  private function queryCount($date) {
+    return $this->get('1/queries/count/' . $date);
   }
 
-  private function queryPopular($dateRange, $size = '') {
+  private function queryPopular($date, $size = '') {
     $parameter = empty($size) ? '' : '?size=' . $size;
 
-    return $this->get('1/queries/popular/' . $dateRange . $parameter);
+    return $this->get('1/queries/popular/' . $date . $parameter);
   }
 
   /**

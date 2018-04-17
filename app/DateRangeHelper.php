@@ -2,37 +2,32 @@
 
 namespace App;
 
-class DateRangeHelper implements \Countable
+class DateRangeHelper
 {
   const FORMAT_REGEX = '~([0-9]{4})(?:-(\d{2}))?(?:-(\d{2}))?(?: (\d{2}):(\d{2}))?~';
-  private $dates = [];
-  private $dateRange;
+  const MAX_DEPTH = 3;
 
-  public function __construct(string $dateRange) {
-    $this->dateRange = urldecode($dateRange);
-    preg_match(self::FORMAT_REGEX, $dateRange, $this->dates);
+  private $date;
+  private $dates = [];
+
+  public function __construct(string $date) {
+    $this->date = urldecode($date);
+    preg_match(self::FORMAT_REGEX, $this->date, $this->dates);
+    array_shift($this->dates);
+  }
+
+  public function cut($depth = self::MAX_DEPTH) {
+    $date = $this->dates;
+    array_splice($date, $depth);
+
+    return join('-', $date);
   }
 
   public function year() {
-    return $this->dates[1];
-  }
-
-  public function month() {
-    return $this->dates[2] ?? null;
-  }
-
-  public function day() {
-    return $this->dates[3] ?? null;
+    return $this->dates[0];
   }
 
   public function __toString() {
-    return $this->dateRange;
-  }
-
-  /**
-   * @inherit
-   */
-  public function count() {
-    return count($this->dates) - 1;
+    return $this->date;
   }
 }

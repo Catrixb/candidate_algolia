@@ -2,7 +2,10 @@
 
 namespace App\Cache;
 
+use App\Config;
 use App\Exceptions\CacheNotImplementedException;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 
 class CacheFactory
 {
@@ -23,7 +26,11 @@ class CacheFactory
         break;
       case self::FILE:
       default:
-        return new FileCache();
+        $config = Config::self();
+        $adapter = new Local($config->get('file.query.cache'));
+        $fileSystem = new Filesystem($adapter);
+
+        return new FileCache($fileSystem, $config);
         break;
     }
   }
