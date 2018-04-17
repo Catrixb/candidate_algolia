@@ -16,7 +16,7 @@ class CountCommand extends QueryCommand
       ->countLines()
       ->trim()
       ->removeNewLines();
-
+    
     return parent::execute();
   }
 }

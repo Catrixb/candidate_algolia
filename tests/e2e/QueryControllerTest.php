@@ -74,16 +74,17 @@ class QueryControllerTest extends TestCase
 
   /**
    * @test
+   * @TODO Check for the missing translation
    */
   public function it_fails_on_popular_request_with_wrong_size_parameter() {
     $this->queryPopular('2015-08-02', "undefined");
     $this->assertEquals(
-      '{"size":["The size must be an integer."]}', $this->response->getContent()
+      '{"size":["validation.integer"]}', $this->response->getContent()
     );
 
     $this->queryPopular('2015-08-02');
     $this->assertEquals(
-      '{"size":["The size field is required."]}', $this->response->getContent()
+      '{"size":["validation.required"]}', $this->response->getContent()
     );
   }
 }

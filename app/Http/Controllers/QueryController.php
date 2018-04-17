@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\QueryFactory;
-use App\QueryFileFactory;
+use App\ApcCacheFactory;
+use App\Cache\CacheFactory;
+use App\Cache\QueryFactoryCache;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller;
@@ -19,11 +20,12 @@ class QueryController extends Controller
    * @return Response
    */
   public function count($dateRange) {
+    $dateRange = urldecode($dateRange);
+
+    $cache = new QueryFactoryCache(CacheFactory::getCache());
+
     return response()->json(
-      QueryFactory::count(
-        QueryFileFactory::getFileInfo($dateRange),
-        $dateRange
-      )
+      $cache->count($dateRange)
     );
   }
 
@@ -42,13 +44,12 @@ class QueryController extends Controller
     ]);
 
     $size = $request->get('size');
+    $dateRange = urldecode($dateRange);
+
+    $cache = new QueryFactoryCache(CacheFactory::getCache());
 
     return response()->json(
-      QueryFactory::popular(
-        QueryFileFactory::getFileInfo($dateRange),
-        $dateRange,
-        $size
-      )
+      $cache->popular($dateRange, $size)
     );
   }
 }

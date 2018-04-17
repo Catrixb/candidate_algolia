@@ -8,9 +8,8 @@ class ShellCommand
 
   public function __construct($find, \SplFileInfo $file) {
     $grep = $file->getExtension() === 'gz' ? 'zgrep' : "grep";
-
     // Use LC_ALL=C to change the locale for better grep performances
-    $this->command[] = "LC_ALL=C $grep '^$find' {$file->getRealPath()}";
+    $this->command[] = "LC_ALL=C $grep '^$find' " . $file->getPathname();
 
     return $this;
   }

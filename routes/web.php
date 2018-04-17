@@ -12,7 +12,7 @@
 */
 
 $router->group(['prefix' => '1/queries/'], function() use ($router) {
-  $dateRangeValidation = '[0-9]{4}(?:-\d{2})?(?:-\d{2})?(?: \d{2}:\d{2})?';
+  $dateRangeValidation = '[0-9]{4}(?:-\d{2})?(?:-\d{2})?(?:%20\d{2}:\d{2})?';
 
   $router
     ->get('count/{dateRange:'. $dateRangeValidation .'}', [

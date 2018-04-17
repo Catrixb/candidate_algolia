@@ -2,38 +2,28 @@
 
 namespace App;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\Filesystem;
-
 class QueryFileFactory
 {
-  static private $localQueryPath = 'app/queries/';
-  static private $fileName = 'hn_logs.tsv.gz';
-
-  static public function getFileInfo(string $date) {
-    $file = new \SplFileInfo(static::buildPath($date));
-
-    if (!$file->isExecutable()) {
-      chmod($file->getRealPath()  , octdec(755));
-    }
-
-    return $file;
-  }
-
-  static private function buildPath(string $date) {
+  /*
+   * @TODO extract to event
+   */
+  static public function removeFileReduced(string $date) {
+    $date = preg_replace('~\s.*~', '', $date);
     $dates = explode('-', $date);
 
-    $path = storage_path(static::$localQueryPath);
-    $adapter = new Local($path);
-    $fileSystem = new Filesystem($adapter);
+    array_map('unlink', glob(
+      storage_path(config("app.file.query.path")) .
+      config("app.file.query.name") .
+      "-$dates[0]-*" .
+      config("app.file.query.extension")
+    ));
+  }
 
-    $yearPath = $dates[0] . '/' . static::$fileName;
+  static public function getFileInfo(string $date, $path = '') {
+    $reducer = new QueryFileReducer(
+      empty($path) ? storage_path(config("app.file.query.path")) : $path
+    );
 
-    if (!$fileSystem->has($yearPath)) {
-      throw new FileNotFoundException($yearPath);
-    }
-
-    return $path . $yearPath;
+    return $reducer->reduce($date);
   }
 }

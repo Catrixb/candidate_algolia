@@ -7,6 +7,7 @@ use Symfony\Component\Process\Process;
 abstract class QueryCommand
 {
   protected $process;
+  protected $command;
 
   public function __construct(ShellCommand $command) {
     $this->command = $command;
@@ -16,7 +17,12 @@ abstract class QueryCommand
   public function execute() {
     $this->process
       ->setCommandLine((string) $this->command)
-      ->mustRun();
+      ->run();
+
+    if (!$this->process->isSuccessful()) {
+      // @TODO Log error
+      return null;
+    }
 
     return $this->process->getOutput();
   }

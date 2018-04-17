@@ -99,4 +99,7 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+// Custom configuration file to /config/app.php
+$app->configure('app');
+
 return $app;
