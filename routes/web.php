@@ -16,11 +16,13 @@ $router->group(['prefix' => '1/queries/'], function() use ($router) {
 
   $router
     ->get('count/{dateRange:'. $dateRangeValidation .'}', [
-      'uses' => 'QueryController@count'
+      'uses' => 'QueryController@count',
+      'middleware' => ['queries']
     ]);
 
   $router
     ->get('popular/{dateRange:'. $dateRangeValidation .'}', [
-      'uses' => 'QueryController@popular'
+      'uses' => 'QueryController@popular',
+      'middleware' => ['queries']
     ]);
 });
