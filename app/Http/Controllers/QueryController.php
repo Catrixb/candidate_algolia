@@ -29,7 +29,7 @@ class QueryController extends Controller
     );
 
     return response()->json(
-      $cache->count($date)
+      $cache->count(urldecode($date))
     );
   }
 
@@ -56,7 +56,7 @@ class QueryController extends Controller
     );
 
     return response()->json(
-      $cache->popular($date, $size)
+      $cache->popular(urldecode($date), $size)
     );
   }
 }
