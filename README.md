@@ -13,7 +13,7 @@ Either create a specific vhost or run a php server locally.
 
 ### Prerequisites
 
-- The application needs the provided [data file](https://www.dropbox.com/s/duv704waqjp3tu1/hn_logs.tsv.gz?dl=0) to be stored in `storage/app/queries/`. It is automatically downloaded from the dropbox server to get up and running. 
+- The application needs the provided [data file](https://www.dropbox.com/s/duv704waqjp3tu1/hn_logs.tsv.gz?dl=0) to be stored in `storage/app/queries/`. It is automatically copied from the test fixtures to get up and running. 
 
 ### Routes available
 

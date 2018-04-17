@@ -16,6 +16,8 @@ class QueryControllerTest extends TestCase
     if (file_exists($fileToClean)) {
       unlink($fileToClean);
     }
+
+    exec('rm -r ' . base_path('tests/fixtures/cache'));
   }
 
   private function queryCount($date) {
