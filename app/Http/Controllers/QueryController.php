@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\ApcCacheFactory;
-use App\Cache\CacheFactory;
 use App\Cache\QueryFactoryCache;
-use App\Config;
-use App\QueryFileReducer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller;
 
 class QueryController extends Controller
 {
+  private $query;
+
+  public function __construct(QueryFactoryCache $query) {
+    $this->query = $query;
+  }
   /**
    *  Returns a JSON object specifying the number of distinct queries that
    *  have been done during a specific time range
@@ -22,14 +24,8 @@ class QueryController extends Controller
    * @return Response
    */
   public function count($date) {
-    $cache = new QueryFactoryCache(
-      CacheFactory::getCache(),
-      Config::self(),
-      new QueryFileReducer(Config::self())
-    );
-
     return response()->json(
-      $cache->count(urldecode($date))
+      $this->query->count(urldecode($date))
     );
   }
 
@@ -47,16 +43,11 @@ class QueryController extends Controller
       'size' => 'required|integer'
     ]);
 
-    $size = $request->get('size');
-
-    $cache = new QueryFactoryCache(
-      CacheFactory::getCache(),
-      Config::self(),
-      new QueryFileReducer(Config::self())
-    );
-
     return response()->json(
-      $cache->popular(urldecode($date), $size)
+      $this->query->popular(
+        urldecode($date), 
+        $request->get('size')
+      )
     );
   }
 }

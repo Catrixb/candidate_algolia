@@ -7,9 +7,13 @@ The goal is to extract the popular (most frequent) queries that have been done d
 
 ### Bootstrap
 
+Clone the project and install the dependencies
+
+`composer install`
+
 Either create a specific vhost or run a php server locally.
 
-`php -S localhost:8000 -t public` 
+`php -S localhost:8000 -t public`
 
 ### Prerequisites
 
@@ -36,12 +40,3 @@ $ ./vendor/bin/phpunit --testsuite feature
 $ # unit tests
 $ ./vendor/bin/phpunit --testsuite unit
 ```
-
-### Enhancements
-
-- The project lacks monitoring. We should add application logs.
-- A simple reduce algorithm on the file gives better performances but is currently stored locally. 
-To scale, we may envisage a Key/Value DB (redis) for partitioning and concurrency.
-- Some unit tests are missing, notably for the File reducer algorithm and the cache.
-- We should enhance the way we work with the files. We may use an S3 connector and refine the whole configuration management of the app.
-- Some parts of the app should be driven by events, like the management of the cache.

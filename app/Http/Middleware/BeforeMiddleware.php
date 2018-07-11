@@ -17,6 +17,11 @@ class BeforeMiddleware
    */
   public function handle($request, Closure $next) {
     $toStorage = Config::self()->getFullPath('2015');
+
+    if (!is_dir(storage_path('app/queries'))) {
+      mkdir(storage_path('app/queries'));
+    }
+
     if (!file_exists($toStorage)) {
       $fromFixture = base_path('tests/fixtures/hn_logs-2015.tsv.gz');
 
